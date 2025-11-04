@@ -2,7 +2,8 @@
 
 Convert **real web pages** or **HTML bundles** into pixel‑perfect **PDF** or **PNG** — reliably, asynchronously, and developer‑friendly.
 
-[![Made for Developers](https://img.shields.io/badge/made_for-developers-blueviolet)](#)
+[![Enterprise Ready](https://img.shields.io/badge/enterprise-ready-0B8043)](#-enterprise--security)
+[![Made for Developers and ](https://img.shields.io/badge/made_for-developers-blueviolet)](#)
 [![Async Jobs](https://img.shields.io/badge/async-jobs-success)](#)
 [![Formats](https://img.shields.io/badge/output-PDF%20%7C%20PNG-informational)](#)
 [![License](https://img.shields.io/badge/license-Apache--2.0-lightgrey)](#license)
