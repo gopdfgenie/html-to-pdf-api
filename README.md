@@ -24,8 +24,11 @@ Convert **real web pages** or **HTML bundles** into pixel‑perfect **PDF** or *
 [![OpenAPI](https://img.shields.io/badge/OpenAPI-3.0-blue)](./openapi.yaml)
 [![Postman](https://img.shields.io/badge/Postman-collection-orange)](./gopdfgenie_postman_collection.json)
 
-- Public Postman workspace: https://www.postman.com/gopdfgenie-2439423/workspace/gopdfgenie-htmlpdf-api/collection/49834716-eadea2d5-526b-45e2-b3a7-e88aaa469030
+- OpenAPI (YAML): [`openapi.yaml`](./openapi.yaml) • Raw: `https://raw.githubusercontent.com/gopdfgenie/html-to-pdf-api/main/openapi.yaml`
+- Postman collection: [`gopdfgenie_postman_collection.json`](./gopdfgenie_postman_collection.json)
+- Public Postman workspace: https://www.postman.com/gopdfgenie-2439423/workspace/gopdfgenie-htmlpdf-api/collection/49834716-eadea2d5-526b-45e2-b3a7-e88aaa469030?action=share&creator=49834716  
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/49834716-eadea2d5-526b-45e2-b3a7-e88aaa469030?env[base_url]=https://gopdfgenie.com/api/v1)
+
 
 
 ## ⚡ Quick Start (30 seconds)
