@@ -20,7 +20,14 @@ Convert **real web pages** or **HTML bundles** into pixel‑perfect **PDF** or *
 
 > This README matches the controllers in your backend (PdfConversionController & JobController).
 
----
+### API Specs & Tools
+[![OpenAPI](https://img.shields.io/badge/OpenAPI-3.0-blue)](./openapi.yaml)
+[![Postman](https://img.shields.io/badge/Postman-collection-orange)](./gopdfgenie_postman_collection.json)
+
+- OpenAPI (YAML): [`openapi.yaml`](./openapi.yaml) • Raw: `https://raw.githubusercontent.com/gopdfgenie/html-to-pdf-api/main/openapi.yaml`
+- Postman collection: [`gopdfgenie_postman_collection.json`](./gopdfgenie_postman_collection.json)
+<!-- Replace <PUBLIC_WORKSPACE_URL> after you publish -->
+[![Run in Postman](https://run.pstmn.io/button.svg)](<PUBLIC_WORKSPACE_URL>)
 
 ## ⚡ Quick Start (30 seconds)
 
