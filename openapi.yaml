@@ -1,0 +1,201 @@
+openapi: 3.0.3
+info:
+  title: GoPDFGenie API
+  version: "1.0.0"
+  description: |
+    HTML → PDF/PNG async API for real webpages, iframes, SPAs, and complex JS.
+    Works with guest (no token) or bearer auth (plans). RapidAPI proxy secret header optional.
+servers:
+  - url: https://gopdfgenie.com/api/v1
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  parameters:
+    OrientationParam:
+      in: query
+      name: orientation
+      required: false
+      schema:
+        type: string
+        enum: [portrait, landscape]
+        default: portrait
+      description: PDF layout orientation.
+    OutputFormatParam:
+      in: query
+      name: outputFormat
+      required: false
+      schema:
+        type: string
+        enum: [pdf, png]
+        default: pdf
+      description: Output format.
+    PageSizeParam:
+      in: query
+      name: pageSize
+      required: false
+      schema:
+        type: string
+        enum: [Long, A4, A5, Letter, Legal, Tabloid]
+        default: A4
+      description: |
+        Page size. Use Long for tall PNG screenshots; use A4/Letter for PDFs.
+    QualityParam:
+      in: query
+      name: quality
+      required: false
+      schema:
+        type: string
+        enum: [STANDARD, LOW, MEDIUM, HIGH]
+        default: STANDARD
+      description: Image DPI preset (applies to PNG).
+    RapidProxyHeader:
+      in: header
+      name: X-RapidAPI-Proxy-Secret
+      required: false
+      schema:
+        type: string
+      description: Optional RapidAPI proxy secret, if configured.
+paths:
+  /convert/url/async:
+    post:
+      summary: Create conversion job from public URL (async)
+      description: Submit a public URL to convert to PDF/PNG. Returns a jobId to poll.
+      parameters:
+        - $ref: '#/components/parameters/OrientationParam'
+        - $ref: '#/components/parameters/OutputFormatParam'
+        - $ref: '#/components/parameters/PageSizeParam'
+        - $ref: '#/components/parameters/QualityParam'
+        - $ref: '#/components/parameters/RapidProxyHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [url]
+              properties:
+                url:
+                  type: string
+                  format: uri
+      responses:
+        "200":
+          description: Job created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jobId:
+                    type: string
+        "400": { description: Invalid input }
+        "401": { description: Unauthorized (if token required by plan) }
+        "413": { description: Payload too large }
+        "429": { description: Rate limited / out of credits }
+        "5xx": { description: Server error }
+  /convert/async:
+    post:
+      summary: Create conversion job from uploaded HTML/ZIP (async)
+      description: Upload index.html or a .zip bundle. Returns a jobId to poll.
+      parameters:
+        - $ref: '#/components/parameters/OrientationParam'
+        - $ref: '#/components/parameters/OutputFormatParam'
+        - $ref: '#/components/parameters/PageSizeParam'
+        - $ref: '#/components/parameters/QualityParam'
+        - $ref: '#/components/parameters/RapidProxyHeader'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: Job created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jobId:
+                    type: string
+        "400": { description: Invalid input }
+        "401": { description: Unauthorized (if token required by plan) }
+        "413": { description: Payload too large }
+        "429": { description: Rate limited / out of credits }
+        "5xx": { description: Server error }
+  /jobs/{jobId}/status:
+    get:
+      summary: Get job status
+      parameters:
+        - in: path
+          name: jobId
+          required: true
+          schema: { type: string }
+        - $ref: '#/components/parameters/RapidProxyHeader'
+      responses:
+        "200":
+          description: Current status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [PENDING, RUNNING, COMPLETED, FAILED]
+                  requestedDpi: { type: integer, nullable: true }
+                  actualDpi: { type: integer, nullable: true }
+                  purgeAt: { type: string, format: date-time, nullable: true }
+        "404": { description: Job not found }
+  /jobs/{jobId}/result:
+    get:
+      summary: Download the finished file (PDF/PNG)
+      parameters:
+        - in: path
+          name: jobId
+          required: true
+          schema: { type: string }
+        - $ref: '#/components/parameters/RapidProxyHeader'
+      responses:
+        "200":
+          description: File stream
+          content:
+            application/pdf: { schema: { type: string, format: binary } }
+            image/png:      { schema: { type: string, format: binary } }
+        "202":
+          description: Job still processing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string }
+        "404": { description: Job not found }
+  /jobs/{jobId}/download:
+    get:
+      summary: Get a JSON link to /result (when ready)
+      parameters:
+        - in: path
+          name: jobId
+          required: true
+          schema: { type: string }
+        - $ref: '#/components/parameters/RapidProxyHeader'
+      responses:
+        "200":
+          description: Ready
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  downloadUrl: { type: string }
+        "400": { description: Not ready yet }
+        "404": { description: Job not found }
+security: []  # guest allowed; add - bearerAuth per endpoint if you want to require tokens
