@@ -1,4 +1,4 @@
-# 🚀 GoPDFGenie — HTML → PDF/PNG API
+# 🚀 GoPDFGenie — HTML to PDF/PNG API
 
 Convert **real web pages** or **HTML bundles** into pixel‑perfect **PDF** or **PNG** — reliably, asynchronously, and developer‑friendly.
 
