@@ -1,6 +1,6 @@
 # 🚀 GoPDFGenie — HTML to PDF/PNG API
 
-Convert **real web pages** or **HTML bundles** into pixel‑perfect **PDF** or **PNG** — reliably, asynchronously, and developer‑friendly.
+Convert **real web pages** or **HTML bundles** into pixel-perfect **PDF** or **PNG** — reliably, asynchronously, and developer-friendly.
 
 [![Enterprise Ready](https://img.shields.io/badge/enterprise-ready-0B8043)](#-enterprise--security)
 [![Made for Developers and ](https://img.shields.io/badge/made_for-developers-blueviolet)](#)
@@ -13,14 +13,16 @@ Convert **real web pages** or **HTML bundles** into pixel‑perfect **PDF** or *
 ---
 
 ## ✨ Why GoPDFGenie?
+
 - **Real pages, real results** — Works with dashboards, long reports, and complex layouts.
 - **Two easy modes** — Convert a **public URL** or **upload** your HTML/ZIP.
-- **Async that feels instant** — Create a job → poll → download. No long‑running HTTP connections.
+- **Async that feels instant** — Create a job → poll → download. No long-running HTTP connections.
 - **Simple knobs** — `orientation`, `outputFormat`, `pageSize`, `quality`.
 
 > This README matches the controllers in your backend (PdfConversionController & JobController).
 
 ### API Specs & Tools
+
 [![OpenAPI](https://img.shields.io/badge/OpenAPI-3.0-blue)](./openapi.yaml)
 [![Postman](https://img.shields.io/badge/Postman-collection-orange)](./gopdfgenie_postman_collection.json)
 
@@ -29,39 +31,40 @@ Convert **real web pages** or **HTML bundles** into pixel‑perfect **PDF** or *
 - Public Postman workspace: https://www.postman.com/gopdfgenie-2439423/workspace/gopdfgenie-htmlpdf-api/collection/49834716-eadea2d5-526b-45e2-b3a7-e88aaa469030?action=share&creator=49834716  
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/49834716-eadea2d5-526b-45e2-b3a7-e88aaa469030?env[base_url]=https://gopdfgenie.com/api/v1)
 
-
+---
 
 ## ⚡ Quick Start (30 seconds)
 
 ```bash
 # 1) Create a job (URL → PDF)
-curl -X POST "https://gopdfgenie.com/api/v1/convert/url/async?orientation=portrait&outputFormat=pdf&pageSize=A4&quality=STANDARD"    -H "X-API-KEY: YOUR_API_KEY"   -H "Content-Type: application/json"   -d '{ "url": "https://example.com/dashboard" }'
+curl -X POST "https://gopdfgenie.com/api/v1/convert/url/async?orientation=portrait&outputFormat=pdf&pageSize=A4&quality=STANDARD"   -H "X-API-KEY: YOUR_API_KEY"   -H "Content-Type: application/json"   -d '{ "url": "https://example.com/dashboard" }'
 
 # ⇣⇣ response
 # { "jobId": "uuid" }
 
 # 2) Poll status
-curl  -H "X-API-KEY: YOUR_API_KEY"   "https://gopdfgenie.com/api/v1/jobs/<jobId>/status"
+curl -H "X-API-KEY: YOUR_API_KEY"   "https://gopdfgenie.com/api/v1/jobs/<jobId>/status"
 
 # 3) Download result (when COMPLETED)
-curl -L  -H "X-API-KEY: YOUR_API_KEY"   "https://gopdfgenie.com/api/v1/jobs/<jobId>/result" -o output.pdf
+curl -L -H "X-API-KEY: YOUR_API_KEY"   "https://gopdfgenie.com/api/v1/jobs/<jobId>/result"   -o output.pdf
 ```
 
 ---
 
 ## 🧭 API at a Glance
 
-| Method | Path                                  | Content‑Type          | Purpose                                   |
-|------: |-------------------------------------- |---------------------- |-------------------------------------------|
-| POST   | `/convert/url/async`                  | `application/json`    | Convert a **public URL** to PDF/PNG       |
-| POST   | `/convert/async`                      | `multipart/form-data` | Convert an **uploaded HTML/ZIP**          |
-| GET    | `/jobs/{jobId}/status`                | —                     | Check job status                          |
-| GET    | `/jobs/{jobId}/result`                | —                     | **Stream** the finished file (PDF/PNG)    |
-| GET    | `/jobs/{jobId}/download`              | —                     | Get a JSON link to `/result` (if ready)   |
+| Method | Path                       | Content-Type          | Purpose                                   |
+|------: |--------------------------- |---------------------- |-------------------------------------------|
+| POST   | `/convert/url/async`       | `application/json`    | Convert a **public URL** to PDF/PNG       |
+| POST   | `/convert/async`           | `multipart/form-data` | Convert an **uploaded HTML/ZIP**          |
+| GET    | `/jobs/{jobId}/status`     | —                     | Check job status                          |
+| GET    | `/jobs/{jobId}/result`     | —                     | **Stream** the finished file (PDF/PNG)    |
+| GET    | `/jobs/{jobId}/download`   | —                     | Get a JSON link to `/result` (if ready)   |
 
-**Auth:** Every request must include  
-```
-Authorization: Bearer YOUR_API_KEY
+**Auth:** Every request must include
+
+```text
+X-API-KEY: YOUR_API_KEY
 ```
 
 > Using RapidAPI with a proxy secret? Add: `X-RapidAPI-Proxy-Secret: <your-secret>`
@@ -71,22 +74,25 @@ Authorization: Bearer YOUR_API_KEY
 ## 🧩 Convert a Public URL
 
 **Endpoint**: `POST /convert/url/async`  
-**Content‑Type**: `application/json`
+**Content-Type**: `application/json`
 
 **Query Parameters**
-- `orientation`: `portrait` (default) \| `landscape`
-- `outputFormat`: `pdf` (default) \| `png`
-- `pageSize`: `Long` (default) \| `A4` \| `A5` \| `Letter` \| `Legal` \| `Tabloid`
-- `quality`: `STANDARD` (default) \| `LOW` \| `MEDIUM` \| `HIGH`
+
+- `orientation`: `portrait` (default) | `landscape`  
+- `outputFormat`: `pdf` (default) | `png`  
+- `pageSize`: `Long` (default) | `A4` | `A5` | `Letter` | `Legal` | `Tabloid`  
+- `quality`: `STANDARD` (default) | `LOW` | `MEDIUM` | `HIGH`
 
 **Body**
+
 ```json
 { "url": "https://example.com/report" }
 ```
 
 **Example**
+
 ```bash
-curl -X POST "https://gopdfgenie.com/api/v1/convert/url/async?orientation=landscape&outputFormat=pdf&pageSize=Letter&quality=STANDARD"   -H "Authorization: Bearer $GOPDFGENIE_API_KEY"   -H "Content-Type: application/json"   -d '{ "url": "https://example.com/report" }'
+curl -X POST "https://gopdfgenie.com/api/v1/convert/url/async?orientation=landscape&outputFormat=pdf&pageSize=Letter&quality=STANDARD"   -H "X-API-KEY: $GOPDFGENIE_API_KEY"   -H "Content-Type: application/json"   -d '{ "url": "https://example.com/report" }'
 # => { "jobId": "uuid" }
 ```
 
@@ -95,17 +101,20 @@ curl -X POST "https://gopdfgenie.com/api/v1/convert/url/async?orientation=landsc
 ## 📦 Convert an Upload (HTML or ZIP)
 
 **Endpoint**: `POST /convert/async`  
-**Content‑Type**: `multipart/form-data`
+**Content-Type**: `multipart/form-data`
 
 **Form fields**
+
 - `file` — your `index.html` or a `.zip` containing HTML + assets
 
 **Query Parameters** (same as above)
+
 - `orientation`, `outputFormat`, `pageSize`, `quality`
 
 **Example**
+
 ```bash
-curl -X POST "https://gopdfgenie.com/api/v1/convert/async?orientation=portrait&outputFormat=png&pageSize=Long&quality=HIGH"   -H "Authorization: Bearer $GOPDFGENIE_API_KEY"   -F "file=@site.zip;type=application/zip"
+curl -X POST "https://gopdfgenie.com/api/v1/convert/async?orientation=portrait&outputFormat=png&pageSize=Long&quality=HIGH"   -H "X-API-KEY: $GOPDFGENIE_API_KEY"   -F "file=@site.zip;type=application/zip"
 # => { "jobId": "uuid" }
 ```
 
@@ -116,13 +125,17 @@ curl -X POST "https://gopdfgenie.com/api/v1/convert/async?orientation=portrait&o
 ## 🔁 Track & Fetch
 
 ### Check status
+
 `GET /jobs/{jobId}/status` → returns:
+
 ```json
 { "status": "PENDING" }
 ```
+
 ```json
 { "status": "RUNNING" }
 ```
+
 ```json
 {
   "status": "COMPLETED",
@@ -131,67 +144,91 @@ curl -X POST "https://gopdfgenie.com/api/v1/convert/async?orientation=portrait&o
   "purgeAt": "2025-12-01T10:20:30Z"
 }
 ```
+
 ```json
 { "status": "FAILED" }
 ```
 
 ### Download the result
+
 - **Stream the file:** `GET /jobs/{jobId}/result`  
   - Returns `application/pdf` or `image/png` with a proper filename.  
   - If still processing: **202 Accepted** + `{ "message": "Job is still processing." }`
 
 - **Or get a link first:** `GET /jobs/{jobId}/download` →  
-  `{ "downloadUrl": "/api/v1/jobs/<jobId>/result" }` (only when **COMPLETED**)
+
+  ```json
+  { "downloadUrl": "/api/v1/jobs/<jobId>/result" }
+  ```
+
+  (only when **COMPLETED**)
 
 ---
 
-## 🎛️ Options Cheat‑Sheet
+## 🎛️ Options Cheat-Sheet
 
-| Option          | Values                                        | Best for                              |
-|-----------------|-----------------------------------------------|---------------------------------------|
-| `orientation`   | `portrait` \| `landscape`                     | PDF page layout                       |
-| `outputFormat`  | `pdf` \| `png`                                | Choose document vs image              |
+| Option          | Values                                        | Best for                                |
+|-----------------|-----------------------------------------------|-----------------------------------------|
+| `orientation`   | `portrait` | `landscape`                       | PDF page layout                         |
+| `outputFormat`  | `pdf` | `png`                                | Choose document vs image                |
 | `pageSize`      | `Long`, `A4`, `A5`, `Letter`, `Legal`, `Tabloid` | `Long` for tall PNG; `A4/Letter` for PDF |
-| `quality`       | `STANDARD`, `LOW`, `MEDIUM`, `HIGH`           | PNG DPI preset                        |
+| `quality`       | `STANDARD`, `LOW`, `MEDIUM`, `HIGH`           | PNG DPI preset                          |
 
 ---
 
-## 💡 Examples to Copy‑Paste
+## 💡 Examples to Copy-Paste
 
 **Node (fetch)**
+
 ```js
 const API = "https://gopdfgenie.com/api/v1";
-const H = { "Authorization": `Bearer ${process.env.GOPDFGENIE_API_KEY}`, "Content-Type": "application/json" };
+const H = {
+  "X-API-KEY": process.env.GOPDFGENIE_API_KEY,
+  "Content-Type": "application/json",
+};
 
-const submit = await fetch(`${API}/convert/url/async?orientation=portrait&outputFormat=pdf&pageSize=A4&quality=STANDARD`, {
-  method: "POST",
-  headers: H,
-  body: JSON.stringify({ url: "https://example.com/dashboard" })
-});
+const submit = await fetch(
+  `${API}/convert/url/async?orientation=portrait&outputFormat=pdf&pageSize=A4&quality=STANDARD`,
+  {
+    method: "POST",
+    headers: H,
+    body: JSON.stringify({ url: "https://example.com/dashboard" }),
+  }
+);
 const { jobId } = await submit.json();
 
 let status, link;
 for (let i = 0; i < 60; i++) {
-  await new Promise(r => setTimeout(r, 2000));
+  await new Promise((r) => setTimeout(r, 2000));
   const r = await fetch(`${API}/jobs/${jobId}/status`, { headers: H });
   const j = await r.json();
   status = j.status;
-  if (status === "COMPLETED") { link = `${API}/jobs/${jobId}/result`; break; }
+  if (status === "COMPLETED") {
+    link = `${API}/jobs/${jobId}/result`;
+    break;
+  }
   if (status === "FAILED") throw new Error("Conversion failed");
 }
 // download using link (stream to file)
 ```
 
 **Python (requests)**
+
 ```python
 import os, time, json, requests, pathlib
 
 API = "https://gopdfgenie.com/api/v1"
-H = {"Authorization": f"Bearer {os.environ['GOPDFGENIE_API_KEY']}", "Content-Type": "application/json"}
+H = {
+    "X-API-KEY": os.environ["GOPDFGENIE_API_KEY"],
+    "Content-Type": "application/json",
+}
 
 # submit
-r = requests.post(f"{API}/convert/url/async?orientation=portrait&outputFormat=pdf&pageSize=A4&quality=STANDARD",
-                  headers=H, data=json.dumps({"url":"https://example.com/report"}))
+r = requests.post(
+    f"{API}/convert/url/async?orientation=portrait&outputFormat=pdf&pageSize=A4&quality=STANDARD",
+    headers=H,
+    data=json.dumps({"url": "https://example.com/report"}),
+)
 jobId = r.json()["jobId"]
 
 # poll
@@ -211,11 +248,14 @@ for _ in range(60):
 ## 🔐 Authentication
 
 Every request must include your API key:
+
+```text
+X-API-KEY: YOUR_API_KEY
 ```
-Authorization: Bearer YOUR_API_KEY
-```
-RapidAPI (if configured):  
-```
+
+RapidAPI (if configured):
+
+```text
 X-RapidAPI-Proxy-Secret: <your-secret>
 ```
 
@@ -228,7 +268,7 @@ X-RapidAPI-Proxy-Secret: <your-secret>
 - `403` — accessing someone else’s job  
 - `404` — job not found (or not yours)  
 - `413` — payload too large (plan limit)  
-- `429` — rate‑limited or out of credits  
+- `429` — rate-limited or out of credits  
 - `5xx` — transient server issue
 
 ---
@@ -236,11 +276,11 @@ X-RapidAPI-Proxy-Secret: <your-secret>
 ## 💸 Pricing & Credits
 
 - Usage: **1 credit per 10 MB of output** (rounded up)  
-- Plans: Free, Starter, Pro, Business; on‑prem/enterprise available  
+- Plans: Free, Starter, Pro, Business; on-prem/enterprise available  
 - Details: https://gopdfgenie.com/pricing
 
 ---
 
 ## 📜 License
 
-Examples in this repository are provided under **Apache‑2.0**. See `LICENSE`.
+Examples in this repository are provided under **Apache-2.0**. See `LICENSE`.
