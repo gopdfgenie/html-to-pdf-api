@@ -35,16 +35,16 @@ Convert **real web pages** or **HTML bundles** into pixel‑perfect **PDF** or *
 
 ```bash
 # 1) Create a job (URL → PDF)
-curl -X POST "https://gopdfgenie.com/api/v1/convert/url/async?orientation=portrait&outputFormat=pdf&pageSize=A4&quality=STANDARD"   -H "Authorization: Bearer $GOPDFGENIE_API_KEY"   -H "Content-Type: application/json"   -d '{ "url": "https://example.com/dashboard" }'
+curl -X POST "https://gopdfgenie.com/api/v1/convert/url/async?orientation=portrait&outputFormat=pdf&pageSize=A4&quality=STANDARD"    -H "X-API-KEY: YOUR_API_KEY"   -H "Content-Type: application/json"   -d '{ "url": "https://example.com/dashboard" }'
 
 # ⇣⇣ response
 # { "jobId": "uuid" }
 
 # 2) Poll status
-curl -H "Authorization: Bearer $GOPDFGENIE_API_KEY"   "https://gopdfgenie.com/api/v1/jobs/<jobId>/status"
+curl  -H "X-API-KEY: YOUR_API_KEY"   "https://gopdfgenie.com/api/v1/jobs/<jobId>/status"
 
 # 3) Download result (when COMPLETED)
-curl -L -H "Authorization: Bearer $GOPDFGENIE_API_KEY"   "https://gopdfgenie.com/api/v1/jobs/<jobId>/result" -o output.pdf
+curl -L  -H "X-API-KEY: YOUR_API_KEY"   "https://gopdfgenie.com/api/v1/jobs/<jobId>/result" -o output.pdf
 ```
 
 ---
